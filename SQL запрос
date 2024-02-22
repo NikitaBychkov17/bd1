@@ -1,0 +1,59 @@
+CREATE TABLE artists
+(
+	id serial PRIMARY KEY,
+	artist_name varchar(50) NOT NULL
+);
+
+CREATE TABLE genres
+(
+	id serial PRIMARY KEY,
+	genre_name varchar(50) NOT NULL
+);
+
+CREATE TABLE albums
+(
+	id serial PRIMARY KEY,
+	albums_name varchar(50) NOT NULL
+);
+
+CREATE TABLE tracks
+(
+	id serial PRIMARY KEY,
+	track_name varchar(50) NOT NULL,
+	duration varchar(10) NOT NULL
+);
+
+CREATE TABLE collections
+(
+	id serial PRIMARY KEY,
+	collection_name varchar(50) NOT NULL,
+	year_of_release varchar(10) NOT NULL
+);
+
+CREATE TABLE artists_genres
+(
+	artist_id int REFERENCES artists(id),
+	genre_id int REFERENCES genres(id),
+	CONSTRAINT artists_genres_pk PRIMARY KEY (artist_id, genre_id)
+);
+
+CREATE TABLE artists_albums
+(
+	artist_id int REFERENCES artists(id),
+	album_id int REFERENCES albums(id),
+	CONSTRAINT artists_albums_pk PRIMARY KEY (artist_id, album_id)
+);
+
+CREATE TABLE tracks_albums
+(
+	track_id int REFERENCES tracks(id),
+	album_id int REFERENCES albums(id),
+	CONSTRAINT tracks_albums_pk PRIMARY KEY (track_id, album_id)
+);
+
+CREATE TABLE tracks_collections
+(
+	track_id int REFERENCES tracks(id),
+	collection_id int REFERENCES collections(id),
+	CONSTRAINT tracks_collections_pk PRIMARY KEY (track_id, collection_id)
+);
