@@ -1,59 +1,53 @@
-CREATE TABLE artists
+CREATE TABLE IF NOT EXISTS artist
 (
-	id serial PRIMARY KEY,
+	id SERIAL PRIMARY KEY,
 	artist_name varchar(50) NOT NULL
 );
 
-CREATE TABLE genres
+CREATE TABLE IF NOT EXISTS genre
 (
-	id serial PRIMARY KEY,
+	id SERIAL PRIMARY KEY,
 	genre_name varchar(50) NOT NULL
 );
 
-CREATE TABLE albums
+CREATE TABLE IF NOT EXISTS album
 (
-	id serial PRIMARY KEY,
+	id SERIAL PRIMARY KEY,
 	albums_name varchar(50) NOT NULL
 );
 
-CREATE TABLE tracks
+CREATE TABLE IF NOT EXISTS track
 (
-	id serial PRIMARY KEY,
+	id SERIAL PRIMARY KEY,
 	track_name varchar(50) NOT NULL,
-	duration varchar(10) NOT NULL
+	album_id int REFERENCES album(id),
+	duration time
 );
 
-CREATE TABLE collections
+CREATE TABLE IF NOT EXISTS collection
 (
-	id serial PRIMARY KEY,
+	id SERIAL PRIMARY KEY,
 	collection_name varchar(50) NOT NULL,
-	year_of_release varchar(10) NOT NULL
+	year_of_release varchar(4) NOT NULL
 );
 
-CREATE TABLE artists_genres
+CREATE TABLE IF NOT EXISTS track_collection
 (
-	artist_id int REFERENCES artists(id),
-	genre_id int REFERENCES genres(id),
+	track_id int REFERENCES track(id),
+	collection_id int REFERENCES collection(id),
+	CONSTRAINT tracks_collections_pk PRIMARY KEY (track_id, collection_id)
+);
+
+CREATE TABLE IF NOT EXISTS artist_genre
+(
+	artist_id int REFERENCES artist(id),
+	genre_id int REFERENCES genre(id),
 	CONSTRAINT artists_genres_pk PRIMARY KEY (artist_id, genre_id)
 );
 
-CREATE TABLE artists_albums
+CREATE TABLE IF NOT EXISTS album_artist
 (
-	artist_id int REFERENCES artists(id),
-	album_id int REFERENCES albums(id),
+	album_id int REFERENCES album(id),
+	artist_id int REFERENCES artist(id),
 	CONSTRAINT artists_albums_pk PRIMARY KEY (artist_id, album_id)
-);
-
-CREATE TABLE tracks_albums
-(
-	track_id int REFERENCES tracks(id),
-	album_id int REFERENCES albums(id),
-	CONSTRAINT tracks_albums_pk PRIMARY KEY (track_id, album_id)
-);
-
-CREATE TABLE tracks_collections
-(
-	track_id int REFERENCES tracks(id),
-	collection_id int REFERENCES collections(id),
-	CONSTRAINT tracks_collections_pk PRIMARY KEY (track_id, collection_id)
 );
